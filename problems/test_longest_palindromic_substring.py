@@ -142,7 +142,7 @@ class Solution:
         return s[start: end + 1]
 
 
-class TestSolution(object):
+class TestSolution:
     def setup_class(self) -> None:
         self.solution = Solution()
 
