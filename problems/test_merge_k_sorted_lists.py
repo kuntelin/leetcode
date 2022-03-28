@@ -17,7 +17,7 @@ class ListNode:
         self.next = next
 
 
-def to_linked_list(source: List) -> ListNode:
+def array_to_linked_list(source: List) -> ListNode:
     head, pointer = None, None
     for item in source:
         node = ListNode(val=item, next=None)
@@ -35,8 +35,16 @@ def to_linked_list(source: List) -> ListNode:
     return head
 
 
-def from_linked_list(source: ListNode) -> List:
-    return []
+def array_from_linked_list(source: ListNode) -> List:
+    if source is None:
+        return []
+
+    values = []
+    while source:
+        values.append(source.val)
+        source = source.next
+
+    return values
 
 
 def print_linked_list(head: ListNode) -> None:
@@ -52,18 +60,85 @@ def print_linked_list(head: ListNode) -> None:
 
 class Solution:
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> [Optional[ListNode], List]:
+        return self.array_sorted(lists)
+        # return self.merge_two_list(lists)
+        pass
+
+    def array_sorted(self, lists: List[Optional[ListNode]]) -> [Optional[ListNode], List]:
         # empty list
         if lists == [] or all(map(lambda x: x == [], lists)):
-            return []
+            return None
+
+        values = []
+        for joined_list in lists:
+            while joined_list is not None:
+                values.append(joined_list.val)
+                joined_list = joined_list.next
 
         head, pointer = None, None
-        for idx, joined_list in enumerate(lists):
-            logging.info(f'process item {idx}, {joined_list}')
-
+        for item in sorted(values):
             if head is None:
-                head = joined_list
+                head = ListNode(val=item)
+                pointer = head
+            else:
+                pointer.next = ListNode(val=item)
+                pointer = pointer.next
 
-        raise Exception('not finished')
+        return head
+
+    def merge_two_list(self, lists: List[Optional[ListNode]]) -> [Optional[ListNode], List]:
+        # filter empty items
+        cleaned_lists = list(filter(lambda x: x is not None and x != [], lists))
+
+        # empty list
+        if not cleaned_lists:
+            return None
+
+        def _merge_list(list1, list2):
+            head, pointer = None, None
+            while list1 is not None and list2 is not None:
+                if list1.val <= list2.val:
+                    if head is None:
+                        # set head node
+                        head = list1
+                    else:
+                        # link previous node
+                        pointer.next = list1
+
+                    # move forward
+                    pointer = list1
+                    list1 = list1.next
+                else:
+                    if head is None:
+                        # set head node
+                        head = list2
+                    else:
+                        # link previous node
+                        pointer.next = list2
+
+                    # move forward
+                    pointer = list2
+                    list2 = list2.next
+
+                # list1 is empty
+                if list1 is None:
+                    pointer.next = list2
+
+                # list2 is empty
+                if list2 is None:
+                    pointer.next = list1
+
+            return head
+
+        final_head = None
+        logging.debug(f'{cleaned_lists=}')
+        for joined_list in cleaned_lists:
+            if final_head is None:
+                final_head = joined_list
+            else:
+                final_head = _merge_list(final_head, joined_list)
+
+        return final_head
 
 
 class TestSolution(TimeMethodMixin):
@@ -82,7 +157,8 @@ class TestSolution(TimeMethodMixin):
         [
             ([], []),
             ([[]], []),
-            ([to_linked_list([1, 4, 5]), to_linked_list([1, 3, 4]), to_linked_list([2, 6])], [1, 1, 2, 3, 4, 4, 5, 6]),
+            ([array_to_linked_list([1, 4, 5]), array_to_linked_list([1, 3, 4]), array_to_linked_list([2, 6])], [1, 1, 2, 3, 4, 4, 5, 6]),
+            ([array_to_linked_list([2]), array_to_linked_list([]), array_to_linked_list([-1])], [-1, 2]),
         ],
     )
     def test_answer(self, lists, result):
@@ -90,7 +166,7 @@ class TestSolution(TimeMethodMixin):
         response = self.time_method(self.solution.mergeKLists, *(lists, ), **{})
 
         logging.debug('compare output')
-        assert response == result
+        assert array_from_linked_list(response) == result
 
     def teardown_method(self, method):
         pass
@@ -98,28 +174,10 @@ class TestSolution(TimeMethodMixin):
 
 def main():
     parser = argparse.ArgumentParser()
-    loglevel_exclusive_group = parser.add_mutually_exclusive_group()
-    # loglevel_exclusive_group.add_argument(
-    #     '-v', '--verbose',
-    #     action='store_const', type=int, dest='loglevel', default=logging.WARNING, const=logging.INFO,
-    #     help='Enable verbose mode',
-    # )
-    # loglevel_exclusive_group.add_argument(
-    #     '-d', '--debug',
-    #     action='store_const', type=int, dest='loglevel', default=logging.WARNING, const=logging.DEBUG,
-    #     help='Enable debug mode',
-    # )
     parser.add_argument('--log-cli-level', action='store', type=str.upper, default='WARNING')
     args = parser.parse_args()
 
     logging.getLogger().setLevel(logging.getLevelName(args.log_cli_level))
-
-    logging.info('info message')
-    logging.debug('debug message')
-    # print_linked_list(
-    #     ListNode(val=1, next=ListNode(val=2, next=ListNode(val=3, next=None)))
-    # )
-    print_linked_list(to_linked_list([1, 3, 5, 7, 9]))
 
 
 if __name__ == '__main__':
