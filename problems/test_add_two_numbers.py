@@ -4,51 +4,11 @@ import time
 
 import pytest
 
-
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-
-def array_to_list_nodes(data) -> [ListNode, None]:
-    """
-    convert array to list
-    [] = None
-    [1, 2, 3, 4, 8] = ListNode(1) -> ListNode(2) -> ListNode(3) -> ListNode(4) -> ListNode(8)
-    """
-
-    if data is []:
-        return None
-    else:
-        head = None
-        prev = None
-        for item in data:
-            current = ListNode(val=item)
-
-            if head is None and prev is None:
-                head = current
-            elif head is not None and prev is None:
-                head.next = current
-                prev = current
-            else:
-                prev.next = current
-                prev = current
-
-        return head
-
-
-def list_nodes_to_array(head) -> list:
-    """
-    convert list to array
-    None = []
-    ListNode(1) -> ListNode(2) -> ListNode(3) -> ListNode(4) -> ListNode(8) = [1, 2, 3, 4, 8]
-    """
-    data = []
-    while head is not None:
-        data.append(head.val)
-        head = head.next
-    return data
+from problems.utils import (
+    ListNode,
+    list_node_from_list,
+    list_node_to_list,
+)
 
 
 class Solution:
@@ -68,7 +28,7 @@ class Solution:
 
         return ListNode(val), ten_val
 
-    def addTwoNumbers(self, l1, l2) -> ListNode:
+    def addTwoNumbers(self, l1, l2) -> ListNode:  # noqa
         result_head = None
         previous_node = None
         ten_val = 0
@@ -130,18 +90,18 @@ class TestSolution:
             ([9, 9, 9, 9, 9, 9, 9], [9, 9, 9, 9], [8, 9, 9, 9, 0, 0, 0, 1]),
         ]
     )
-    def test_rotateRight(self, l1, l2, result):
+    def test_rotateRight(self, l1, l2, result):  # noqa
         logging.info(f'testing: {l1=}, {l2=}, {result=}')
 
         logging.debug('convert input')
-        l1 = array_to_list_nodes(l1)
-        l2 = array_to_list_nodes(l2)
+        l1 = list_node_from_list(l1)
+        l2 = list_node_from_list(l2)
 
         logging.debug('execute function')
         response = self.time_method(self.solution.addTwoNumbers, *(l1, l2), **{})
 
         logging.debug('compare output')
-        assert list_nodes_to_array(response) == result
+        assert list_node_to_list(response) == result
 
     def teardown_method(self, method):
         pass

@@ -42,8 +42,8 @@ class TestSolution:
         ["input_data", "output_result"],
         [
             ([[2], [3, 4], [6, 5, 7], [4, 1, 8, 3]], 11),
-            # ([[-10]], -10),
-            # ([[-1], [2, 3], [1, -1, -3]], -1),
+            ([[-10]], -10),
+            ([[-1], [2, 3], [1, -1, -3]], -1),
         ],
     )
     def test_minimumTotal(self, input_data, output_result):

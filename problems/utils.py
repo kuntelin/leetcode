@@ -1,5 +1,20 @@
 import argparse
 import logging
+from typing import Union, List
+
+
+__all__ = [
+    'ListNode',
+    'BiDirectListNode',
+    'TreeNode',
+    'echo',
+    'list_node_to_list',
+    'list_node_from_list',
+    'bi_direction_link_list_from_list',
+    'bi_direction_link_list_debug',
+    'tree_node_from_list',
+    'tree_node_to_list',
+]
 
 
 class ListNode:
@@ -16,7 +31,18 @@ class BiDirectListNode:
         self.next = next
 
 
-def list_to_array(list_head):
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+def echo(arg):
+    return arg
+
+
+def list_node_to_list(list_head):
     """
     convert list to array
     None = []
@@ -29,35 +55,7 @@ def list_to_array(list_head):
     return array_data
 
 
-def array_to_list(array_data):
-    """
-    convert array to list
-    [] = None
-    [1, 2, 3, 4, 8] = ListNode(1) -> ListNode(2) -> ListNode(3) -> ListNode(4) -> ListNode(8)
-    """
-
-    if array_data is []:
-        return None
-    else:
-        head = None
-        prev = None
-
-        for item in array_data:
-            current = ListNode(val=item)
-
-            if head is None and prev is None:
-                head = current
-            elif head is not None and prev is None:
-                head.next = current
-                prev = current
-            else:
-                prev.next = current
-                prev = current
-
-        return head
-
-
-def array_to_list_nodes(data) -> [ListNode, None]:
+def list_node_from_list(data) -> [ListNode, None]:
     """
     convert array to list
     [] = None
@@ -69,6 +67,7 @@ def array_to_list_nodes(data) -> [ListNode, None]:
     else:
         head = None
         prev = None
+
         for item in data:
             current = ListNode(val=item)
 
@@ -84,50 +83,7 @@ def array_to_list_nodes(data) -> [ListNode, None]:
         return head
 
 
-def list_nodes_to_array(head) -> list:
-    """
-    convert list to array
-    None = []
-    ListNode(1) -> ListNode(2) -> ListNode(3) -> ListNode(4) -> ListNode(8) = [1, 2, 3, 4, 8]
-    """
-    data = []
-    while head is not None:
-        data.append(head.val)
-        head = head.next
-    return data
-
-
-def array_to_link_list(array_data) -> (int, [ListNode, None]):
-    """
-    convert array to list
-    [] = None
-    [1, 2, 3, 4, 8] = ListNode(1) -> ListNode(2) -> ListNode(3) -> ListNode(4) -> ListNode(8)
-    """
-
-    if array_data is []:
-        return 0, None
-    else:
-        counter = 0
-        head = None
-        prev = None
-
-        for item in array_data:
-            counter += 1
-            current = ListNode(val=item)
-
-            if head is None and prev is None:
-                head = current
-            elif head is not None and prev is None:
-                head.next = current
-                prev = current
-            else:
-                prev.next = current
-                prev = current
-
-        return counter, head
-
-
-def array_to_bi_direction_link_list(array_data) -> (int, [BiDirectListNode, None]):
+def bi_direction_link_list_from_list(array_data) -> (int, [BiDirectListNode, None]):
     if array_data is []:
         return 0, None
     else:
@@ -161,7 +117,7 @@ def array_to_bi_direction_link_list(array_data) -> (int, [BiDirectListNode, None
         return counter, head
 
 
-def debug_bi_direction_link_list(list_head: [BiDirectListNode, None]):
+def bi_direction_link_list_debug(list_head: [BiDirectListNode, None]):
     # walk through bi direction link list
     walk_head = list_head
 
@@ -180,6 +136,68 @@ def debug_bi_direction_link_list(list_head: [BiDirectListNode, None]):
     logging.debug('=' * 80)
 
 
+def tree_node_from_list(tree_nodes: List[int]) -> Union[TreeNode, None]:
+    if not tree_nodes:
+        return None
+
+    def item_number_in_depth(_depth: int) -> int:
+        return 2 ** (_depth - 1)
+
+    def total_item_number_in_depth(_depth: int) -> int:
+        return sum([item_number_in_depth(d) for d in range(1, _depth + 1)])
+
+    def find_depth(dest_number) -> (int, int):
+        _depth, _item_number = 1, total_item_number_in_depth(1)
+        while dest_number > _item_number:
+            _depth += 1
+            _item_number = total_item_number_in_depth(_depth)
+        return _depth, _item_number
+
+    def construct_children(parent_nodes: List[TreeNode], children_values: List):
+        children_nodes = []
+        for parent_node in parent_nodes:
+            left_val = children_values.pop(0)
+            if left_val is not None:
+                left_node = TreeNode(left_val)
+                children_nodes.append(left_node)
+                parent_node.left = left_node
+
+            right_val = children_values.pop(0)
+            if right_val is not None:
+                right_node = TreeNode(right_val)
+                children_nodes.append(right_node)
+                parent_node.right = right_node
+
+        if children_values:
+            construct_children(children_nodes, children_values)
+
+    node_counter = len(tree_nodes)
+
+    if node_counter == 0:
+        return None
+    elif node_counter == 1:
+        return TreeNode(tree_nodes.pop(0))
+    else:
+        depth, expected_node_counter = find_depth(node_counter)
+        logging.info(f'expected depth {depth} have {expected_node_counter} items in it')
+
+        if node_counter != expected_node_counter:
+            tree_nodes.extend([None] * (expected_node_counter - node_counter))
+
+        logging.info(f'tree_nodes now have {len(tree_nodes)} items in it')
+        logging.debug(f'{tree_nodes=}')
+
+        root = TreeNode(tree_nodes.pop(0))
+
+        construct_children([root], tree_nodes)
+
+        return root
+
+
+def tree_node_to_list(root: TreeNode) -> List[int]:
+    pass
+
+
 def main():
     parser = argparse.ArgumentParser()
     exclusive_group = parser.add_mutually_exclusive_group()
@@ -191,9 +209,6 @@ def main():
         logging.getLogger().setLevel(logging.INFO)
     elif args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
-
-    print(list_to_array(array_to_list([])))
-    print(list_to_array(array_to_list([1, 2, 3, 4, 8])))
 
 
 if __name__ == '__main__':

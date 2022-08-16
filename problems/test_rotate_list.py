@@ -4,10 +4,10 @@ import time
 
 import pytest
 
-from .utils import (
+from problems.utils import (
     ListNode,
-    list_nodes_to_array,
-    array_to_list_nodes,
+    list_node_to_list,
+    list_node_from_list,
 )
 
 
@@ -84,7 +84,7 @@ class Solution2:
             return head
 
         # count list length
-        head_array = list_nodes_to_array(head)
+        head_array = list_node_to_list(head)
         head_len = len(head_array)
 
         if k >= head_len:
@@ -96,7 +96,7 @@ class Solution2:
 
         result = head_array[-k:] + head_array[:(head_len - k)]
 
-        return array_to_list_nodes(result)
+        return list_node_from_list(result)
 
 
 class TestSolution:
@@ -146,13 +146,13 @@ class TestSolution:
         logging.info(f'testing: {head=}, {k=}, {result=}')
 
         logging.debug('convert input')
-        head = array_to_list_nodes(head)
+        head = list_node_from_list(head)
 
         logging.debug('execute function')
         response = benchmark(self.solution.rotateRight, *(head, k), **{})
 
         logging.debug('compare output')
-        assert list_nodes_to_array(response) == result
+        assert list_node_to_list(response) == result
 
     def teardown_method(self, method):
         pass

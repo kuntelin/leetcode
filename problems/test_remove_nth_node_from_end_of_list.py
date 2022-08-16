@@ -3,12 +3,12 @@ import logging
 
 import pytest
 
-from .utils import (
+from problems.utils import (
     ListNode,
-    array_to_list_nodes,
-    list_nodes_to_array,
-    array_to_bi_direction_link_list,
-    debug_bi_direction_link_list,
+    list_node_from_list,
+    list_node_to_list,
+    bi_direction_link_list_from_list,
+    bi_direction_link_list_debug,
 )
 
 
@@ -17,7 +17,7 @@ class Solution:
     using python array
     """
     def removeNthFromEnd(self, head: ListNode, n: int) -> [ListNode, None]:
-        data_array = list_nodes_to_array(head)
+        data_array = list_node_to_list(head)
         data_len = len(data_array)
         logging.debug(f'{data_array=}, {data_len=}')
 
@@ -38,14 +38,14 @@ class Solution:
         else:
             result = data_array[0:remove_idx] + data_array[remove_idx + 1:]
 
-        return array_to_list_nodes(result)
+        return list_node_from_list(result)
 
 
 class Solution2:
     """
     using link list
     """
-    def removeNthFromEnd(self, head: ListNode, n: int) -> [ListNode, None]:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> [ListNode, None]:  # noqa
         # get list length
         data_len = 0
         tmp_head = head
@@ -98,8 +98,8 @@ class Solution3:
     """
     using bi direction link list
     """
-    def removeNthFromEnd(self, head: ListNode, n: int) -> [ListNode, None]:
-        list_len, list_head = array_to_bi_direction_link_list(list_nodes_to_array(head))
+    def removeNthFromEnd(self, head: ListNode, n: int) -> [ListNode, None]:  # noqa
+        list_len, list_head = bi_direction_link_list_from_list(list_node_to_list(head))
         target_idx = list_len - n + 1
 
         logging.debug(f'{list_len=}, {list_head=}, {target_idx=}')
@@ -118,7 +118,7 @@ class Solution3:
             return list_head.next
 
         logging.debug('before remove')
-        debug_bi_direction_link_list(list_head)
+        bi_direction_link_list_debug(list_head)
 
         # walk through list and remove target_idx
         tmp_head = list_head
@@ -140,7 +140,7 @@ class Solution3:
                 tmp_head = tmp_head.next
 
         logging.debug('after remove')
-        debug_bi_direction_link_list(list_head)
+        bi_direction_link_list_debug(list_head)
 
         return list_head
 
@@ -171,7 +171,7 @@ class TestSolution:
     )
     def test_positive(self, data, remove_nth, result):
         logging.info(f'testing: {data=}, {remove_nth=}, {result=}')
-        assert list_nodes_to_array(self.solution.removeNthFromEnd(array_to_list_nodes(data), remove_nth)) == result
+        assert list_node_to_list(self.solution.removeNthFromEnd(list_node_from_list(data), remove_nth)) == result
 
     @pytest.mark.parametrize(
         ["data", "remove_nth", "result"],
@@ -183,7 +183,7 @@ class TestSolution:
     )
     def test_empty_list(self, data, remove_nth, result):
         logging.info(f'testing: {data=}, {remove_nth=}, {result=}')
-        assert list_nodes_to_array(self.solution.removeNthFromEnd(array_to_list_nodes(data), remove_nth)) == result
+        assert list_node_to_list(self.solution.removeNthFromEnd(list_node_from_list(data), remove_nth)) == result
 
     @pytest.mark.parametrize(
         ["data", "remove_nth", "result"],
@@ -195,7 +195,7 @@ class TestSolution:
     )
     def test_out_of_bound(self, data, remove_nth, result):
         logging.info(f'testing: {data=}, {remove_nth=}, {result=}')
-        assert list_nodes_to_array(self.solution.removeNthFromEnd(array_to_list_nodes(data), remove_nth)) == result
+        assert list_node_to_list(self.solution.removeNthFromEnd(list_node_from_list(data), remove_nth)) == result
 
     @pytest.mark.parametrize(
         ["data", "remove_nth", "result"],
@@ -208,7 +208,7 @@ class TestSolution:
     )
     def test_all(self, data, remove_nth, result):
         logging.info(f'testing: {data=}, {remove_nth=}, {result=}')
-        assert list_nodes_to_array(self.solution.removeNthFromEnd(array_to_list_nodes(data), remove_nth)) == result
+        assert list_node_to_list(self.solution.removeNthFromEnd(list_node_from_list(data), remove_nth)) == result
 
 
 def main():
