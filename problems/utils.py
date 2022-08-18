@@ -1,6 +1,7 @@
 import argparse
 import logging
 from typing import Union, List
+from collections import defaultdict
 
 
 __all__ = [
@@ -168,7 +169,8 @@ def tree_node_from_list(tree_nodes: List[int]) -> Union[TreeNode, None]:
                 children_nodes.append(right_node)
                 parent_node.right = right_node
 
-        if children_values:
+        if children_nodes:
+            logging.debug(f'{children_values=}')
             construct_children(children_nodes, children_values)
 
     node_counter = len(tree_nodes)
@@ -195,7 +197,33 @@ def tree_node_from_list(tree_nodes: List[int]) -> Union[TreeNode, None]:
 
 
 def tree_node_to_list(root: TreeNode) -> List[int]:
-    pass
+    def expose_children(tree_node, depth, total_values):
+        if tree_node is None:
+            total_values[depth].append(None)
+            return
+
+        total_values[depth].append(tree_node.val)
+
+        if tree_node.left is None and tree_node.right is None:
+            return
+
+        expose_children(tree_node.left, depth + 1, total_values)
+        expose_children(tree_node.right, depth + 1, total_values)
+
+    result = defaultdict(list)
+    expose_children(root, 0, result)
+
+    logging.debug(f'{result=}')
+
+    final_value = []
+    for values in result.values():
+        if all(map(lambda x: x is None, values)):
+            # skip all None values
+            continue
+        final_value.extend(values)
+    logging.debug(f'{final_value=}')
+
+    return final_value
 
 
 def main():
