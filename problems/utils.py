@@ -175,23 +175,26 @@ def tree_node_from_list(tree_nodes: List[int]) -> Union[TreeNode, None]:
 
     node_counter = len(tree_nodes)
 
+    # using copy tree nodes to prevent change tree_nodes values
+    copy_tree_nodes = tree_nodes[:]
+
     if node_counter == 0:
         return None
     elif node_counter == 1:
-        return TreeNode(tree_nodes.pop(0))
+        return TreeNode(copy_tree_nodes.pop(0))
     else:
         depth, expected_node_counter = find_depth(node_counter)
         logging.info(f'expected depth {depth} have {expected_node_counter} items in it')
 
         if node_counter != expected_node_counter:
-            tree_nodes.extend([None] * (expected_node_counter - node_counter))
+            copy_tree_nodes.extend([None] * (expected_node_counter - node_counter))
 
-        logging.info(f'tree_nodes now have {len(tree_nodes)} items in it')
-        logging.debug(f'{tree_nodes=}')
+        logging.info(f'tree_nodes now have {len(copy_tree_nodes)} items in it')
+        logging.debug(f'{copy_tree_nodes=}')
 
-        root = TreeNode(tree_nodes.pop(0))
+        root = TreeNode(copy_tree_nodes.pop(0))
 
-        construct_children([root], tree_nodes)
+        construct_children([root], copy_tree_nodes)
 
         return root
 

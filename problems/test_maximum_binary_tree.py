@@ -8,6 +8,7 @@ import pytest
 
 from problems.utils import (
     TreeNode,
+    tree_node_from_list,
     tree_node_to_list,
 )
 
@@ -56,7 +57,8 @@ class Solution:
 
             return node_object
 
-        return _construct_children(nums)
+        # using copy of nums instead of change the nums values
+        return _construct_children(nums[:])
 
 
 class TestSolution:
@@ -68,6 +70,16 @@ class TestSolution:
 
     def setup_method(self, method):
         pass
+
+    @pytest.mark.parametrize(
+        ["node_list"],
+        [
+            ([6, 3, 5, None, 2, 0, None, None, 1], ),
+        ]
+    )
+    def test_tree_node_help_functions(self, node_list):
+        logging.debug(f'{node_list=}')
+        assert tree_node_to_list(tree_node_from_list(node_list)) == node_list
 
     @pytest.mark.parametrize(
         ["nums", "result"],
