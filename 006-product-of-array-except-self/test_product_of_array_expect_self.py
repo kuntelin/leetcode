@@ -1,6 +1,7 @@
-import pytest
 import logging
 from typing import List
+
+import pytest
 
 logger = logging.getLogger(__name__)
 
@@ -40,14 +41,24 @@ class Solution:
         return result
 
 
-@pytest.mark.parametrize(
-    "nums, expected",
-    [
-        ([1, 2, 4, 6], [48, 24, 12, 8]),
-        ([-1, 0, 1, 2, 3], [0, -6, 0, 0, 0]),
-    ],
+param_names = "nums, expected"
+param_values = (
+    ([1, 2, 4, 6], [48, 24, 12, 8]),
+    ([-1, 0, 1, 2, 3], [0, -6, 0, 0, 0]),
 )
-def test_product_of_array_expect_self(nums: List[int], expected: List[int]):
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_product_of_array_expect_self1(benchmark, nums: List[int], expected: List[int]):
     solution = Solution()
-    assert solution.productExceptSelf2(nums) == expected
-    assert 1 == 1
+
+    result = benchmark(solution.productExceptSelf, nums)
+    assert result == expected
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_product_of_array_expect_self2(benchmark, nums: List[int], expected: List[int]):
+    solution = Solution()
+
+    result = benchmark(solution.productExceptSelf2, nums)
+    assert result == expected

@@ -1,4 +1,5 @@
 from typing import List
+
 import pytest
 
 
@@ -13,13 +14,16 @@ class Solution:
         return False
 
 
-@pytest.mark.parametrize(
-    "nums, expected",
-    [
-        ([1, 2, 3, 3], True),
-        ([1, 2, 3, 4], False),
-    ],
+param_names = "nums, expected"
+param_values = (
+    ([1, 2, 3, 3], True),
+    ([1, 2, 3, 4], False),
 )
-def test_solution01(nums: List[int], expected: bool):
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_contains_duplicate(benchmark, nums: List[int], expected: bool):
     solution = Solution()
-    assert solution.hasDuplicate(nums) == expected
+
+    result = benchmark(solution.hasDuplicate, nums)
+    assert result == expected

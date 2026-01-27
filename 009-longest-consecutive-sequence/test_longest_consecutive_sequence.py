@@ -36,13 +36,16 @@ class Solution:
         return max(current_longest, final_longest)
 
 
-@pytest.mark.parametrize(
-    "nums, expected",
-    [
-        ([2, 20, 4, 10, 3, 4, 5], 4),
-        ([0, 3, 2, 5, 4, 6, 1, 1], 7),
-    ],
+param_names = "nums, expected"
+param_values = (
+    ([2, 20, 4, 10, 3, 4, 5], 4),
+    ([0, 3, 2, 5, 4, 6, 1, 1], 7),
 )
-def test_longest_consecutive_sequence(nums: List[int], expected: int):
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_longest_consecutive_sequence(benchmark, nums: List[int], expected: int):
     solution = Solution()
-    assert solution.longestConsecutive(nums) == expected
+
+    result = benchmark(solution.longestConsecutive, nums)
+    assert result == expected

@@ -52,10 +52,14 @@ class Solution:
         return result
 
 
-@pytest.mark.parametrize(
-    "dummy_input",
-    [["Hello", "World"], [""]],
-)
-def test_encode_and_decode_strings(dummy_input: List[str]):
+param_names = "dummy_input"
+param_values = (["Hello", "World"], [""])
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_encode_and_decode_strings(benchmark, dummy_input: List[str]):
+    # TODO: try to use  benchmark in chained function
+
     solution = Solution()
+
     assert dummy_input == solution.decode(solution.encode(dummy_input))

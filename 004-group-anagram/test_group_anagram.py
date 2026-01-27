@@ -1,6 +1,7 @@
-import pytest
-from typing import List
 from collections import defaultdict
+from typing import List
+
+import pytest
 
 
 class Solution:
@@ -36,21 +37,33 @@ class Solution:
 
         return list(result_dict.values())
 
-@pytest.mark.parametrize(
-    "strs, expected",
-    [
-        (
-            ["act", "pots", "tops", "cat", "stop", "hat"],
-            [
-                ["act", "cat"],
-                ["pots", "tops", "stop"],
-                ["hat"],
-            ],
-        ),
-        (["x"], [["x"]]),
-        ([""], [[""]])
-    ],
+
+param_names = "strs, expected"
+param_values = (
+    (
+        ["act", "pots", "tops", "cat", "stop", "hat"],
+        [
+            ["act", "cat"],
+            ["pots", "tops", "stop"],
+            ["hat"],
+        ],
+    ),
+    (["x"], [["x"]]),
+    ([""], [[""]]),
 )
-def test_group_anagram(strs: List[str], expected: List[List[str]]):
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_group_anagram1(benchmark, strs: List[str], expected: List[List[str]]):
     solution = Solution()
-    assert solution.groupAnagrams(strs) == expected
+
+    result = benchmark(solution.groupAnagrams, strs)
+    assert result == expected
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_group_anagram2(benchmark, strs: List[str], expected: List[List[str]]):
+    solution = Solution()
+
+    result = benchmark(solution.groupAnagrams2, strs)
+    assert result == expected

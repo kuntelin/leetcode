@@ -1,7 +1,8 @@
-import pytest
 import logging
-from typing import List
 from collections import defaultdict
+from typing import List
+
+import pytest
 
 logger = logging.getLogger(__name__)
 
@@ -28,15 +29,24 @@ class Solution:
         return [k for k, v in nums_frequent[:k]]
 
 
-@pytest.mark.parametrize(
-    "nums, k, expected",
-    [
-        ([1, 2, 2, 3, 3, 3], 2, [3, 2]),
-        ([7, 7], 1, [7]),
-    ],
+param_names = "nums, k, expected"
+param_values = (
+    ([1, 2, 2, 3, 3, 3], 2, [3, 2]),
+    ([7, 7], 1, [7]),
 )
-def test_top_k_frequent_elements(nums: List[int], k: int, expected: List[int]):
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_top_k_frequent_elements1(benchmark, nums: List[int], k: int, expected: List[int]):
     solution = Solution()
 
-    assert solution.topKFrequent(nums, k) == expected
-    # assert solution.topKFrequent2(nums, k) == expected
+    result = benchmark(solution.topKFrequent, nums, k)
+    assert result == expected
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_top_k_frequent_elements2(benchmark, nums: List[int], k: int, expected: List[int]):
+    solution = Solution()
+
+    result = benchmark(solution.topKFrequent2, nums, k)
+    assert result == expected

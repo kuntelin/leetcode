@@ -9,15 +9,18 @@ class Solution:
         return sorted(s) == sorted(t)
 
 
-@pytest.mark.parametrize(
-    "s, t, expected",
-    [
-        ("racecar", "carrace", True),
-        ("jar", "jam", False),
-        ("xx", "x", False),
-        ("bbcc", "ccbc", False),
-    ],
+param_names = "s, t, expected"
+param_values = (
+    ("racecar", "carrace", True),
+    ("jar", "jam", False),
+    ("xx", "x", False),
+    ("bbcc", "ccbc", False),
 )
-def test_valid_anagram(s: str, t: str, expected: bool):
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_valid_anagram(benchmark, s: str, t: str, expected: bool):
     solution = Solution()
-    assert solution.isAnagram(s, t) == expected
+
+    result = benchmark(solution.isAnagram, s, t)
+    assert result == expected

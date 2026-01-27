@@ -28,13 +28,16 @@ class Solution:
         return True
 
 
-@pytest.mark.parametrize(
-    "s, expected",
-    [
-        ("Was it a car or a cat I saw?", True),
-        ("tab a cat", False),
-    ],
+param_names = "s, expected"
+param_values = (
+    ("Was it a car or a cat I saw?", True),
+    ("tab a cat", False),
 )
-def test_valid_palindrome(s: str, expected: bool):
+
+
+@pytest.mark.parametrize(param_names, param_values)
+def test_valid_palindrome(benchmark, s: str, expected: bool):
     solution = Solution()
-    assert solution.isPalindrome(s) == expected
+
+    result = benchmark(solution.isPalindrome, s)
+    assert result == expected
