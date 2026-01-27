@@ -30,20 +30,21 @@ jobs:
         run: uv sync --locked --all-extras --dev
 
       - name: Run unittest in uv
-        run: uv run pytest . --junit-xml=reports/test-results.xml --log-cli-level debug
+        run: uv run pytest . --junit-xml=reports/unittest-python-${{ matrix.python-version }}.xml --log-cli-level debug
 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always() # This ensures the report is published even if tests fail
-        with:
-          files: |
-            reports/**/*.xml
-            # reports/**/*.trx
+      # - name: Publish Test Results
+      #   uses: EnricoMi/publish-unit-test-result-action@v2
+      #   if: always() # This ensures the report is published even if tests fail
+      #   with:
+      #     files: |
+      #       reports/**/*.xml
+      #       # reports/**/*.trx
 
       - name: Test Report
         uses: dorny/test-reporter@v2
-        if: ${{ !cancelled() }}       # run this step even if previous step failed
+        # if: ${{ !cancelled() }}
+        if: always()
         with:
-          name: Unittest            # Name of the check run which will be created
-          path: reports/jest-*.xml    # Path to test results
-          reporter: jest-junit        # Format of test results
+          name: Unittest of python ${{ matrix.python-version }}
+          path: reports/unittest-python-${{ matrix.python-version }}.xml
+          reporter: jest-junit
