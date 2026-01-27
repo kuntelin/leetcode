@@ -1,5 +1,7 @@
 # LeetCode
 
+[![Unittest - Python](https://github.com/kuntelin/leetcode/actions/workflows/unitest-python.yaml/badge.svg)](https://github.com/kuntelin/leetcode/actions/workflows/unitest-python.yaml)
+
 ## update python virtual environment with `uv`
 
 ```bash
