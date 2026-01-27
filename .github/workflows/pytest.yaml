@@ -36,5 +36,6 @@ jobs:
         uses: dorny/test-reporter@v2
         if: always()
         with:
+          name: Reports
           path: reports/unittest-python-${{ matrix.python-version }}.xml
           reporter: jest-junit
