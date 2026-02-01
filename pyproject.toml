@@ -13,6 +13,10 @@ dependencies = [
 [tool.ruff]
 line-length = 120
 
+[tool.ruff.lint]
+# Disable the automatic fixing (removal) of unused imports (F401).
+unfixable = ["F401"]
+
 [tool.pytest.ini_options]
 addopts = "-s --benchmark-disable"
 log_cli = 0

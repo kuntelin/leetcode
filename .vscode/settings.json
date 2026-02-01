@@ -8,5 +8,5 @@
       "source.fixAll": "explicit",
       "source.organizeImports.ruff": "explicit"
     }
-  },
+  }
 }
