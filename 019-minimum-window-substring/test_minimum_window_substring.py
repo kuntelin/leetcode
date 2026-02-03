@@ -78,12 +78,12 @@ class Solution:
 
 param_names = "s,t,expected"
 param_values = [
-    # ("OUZODYXAZV", "XYZ", "YXAZ"),
-    # ("xyz", "xyz", "xyz"),
-    # ("x", "xy", ""),
-    # ("ADOBECODEBANC", "ABC", "BANC"),
-    # ("a", "a", "a"),
-    # ("a", "aa", ""),
+    ("OUZODYXAZV", "XYZ", "YXAZ"),
+    ("xyz", "xyz", "xyz"),
+    ("x", "xy", ""),
+    ("ADOBECODEBANC", "ABC", "BANC"),
+    ("a", "a", "a"),
+    ("a", "aa", ""),
     ("aaaaaaaaaaaabbbbbcdd", "abcdd", "abbbbbcdd"),
 ]
 
