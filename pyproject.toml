@@ -12,6 +12,7 @@ dependencies = [
 
 [tool.ruff]
 line-length = 120
+ignore = ["E741"]
 
 [tool.ruff.lint]
 # Disable the automatic fixing (removal) of unused imports (F401).
