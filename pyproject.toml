@@ -21,6 +21,7 @@ ignore = [
 unfixable = ["F401"]
 
 [tool.pytest.ini_options]
+pythonpath = ["."]
 addopts = "-s --benchmark-disable"
 log_cli = 0
 log_cli_level = "ERROR"
