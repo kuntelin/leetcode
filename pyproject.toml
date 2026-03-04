@@ -23,8 +23,16 @@ unfixable = ["F401"]
 [tool.pytest.ini_options]
 pythonpath = ["."]
 addopts = "-s --benchmark-disable"
-log_cli = 0
-log_cli_level = "ERROR"
-log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
-log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+## 使用統一的LOG設定
+log_level = "ERROR"
+log_format = "%(levelname)-8s (%(name)s:%(lineno)s) %(message)s"
+
+## 停用LOG_CLI設定
+#log_cli = 0
+#log_cli_level = "ERROR"
+#log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+##log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
+#log_cli_format = "[%(levelname)-8s] (%(name)s:%(lineno)s) %(message)s"
+
 junit_duration_report = "call"
