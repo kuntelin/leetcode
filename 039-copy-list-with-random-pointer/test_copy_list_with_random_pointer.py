@@ -52,7 +52,6 @@ def test_copy_test_with_random_pointer(benchmark, head: List, expected: List):
 
     solution = Solution()
     result = benchmark(solution.copyRandomList, node_head)
-    result_list = result
     result_list = to_list(result)
 
     assert result_list == expected
