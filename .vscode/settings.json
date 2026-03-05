@@ -9,5 +9,5 @@
       "source.organizeImports.ruff": "explicit"
     }
   },
-  "cSpell.words": ["addopts", "asctime", "dorny", "koko"]
+  "cSpell.words": ["dorny", "koko"]
 }

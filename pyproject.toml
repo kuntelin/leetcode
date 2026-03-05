@@ -22,9 +22,16 @@ unfixable = ["F401"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
-addopts = "-s --benchmark-disable"
-log_cli = 0
-log_cli_level = "ERROR"
-log_cli_format = "%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)"
-log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+addopts = "--benchmark-disable"
+
+# * LOG
+# *   - 使用"--log-level"時，只顯示測試案例失敗的LOG，顯示於每個案例的"Captured log call"區塊
+# *   - 使用"--log-cli-level"時，顯示所有測試案例的LOG，顯示於"live log call"區塊(最上方)
+
+# * LOG - log setting
+log_format = "%(levelname)-8s %(name)s:%(lineno)s - %(message)s"
+
+# * LOG - log cli setting
+log_cli_format = "%(levelname)-8s %(name)s:%(lineno)s - %(message)s"
+
 junit_duration_report = "call"
